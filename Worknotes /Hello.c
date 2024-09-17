@@ -1,42 +1,20 @@
-#include "main.h"
+#ifndef MAIN_H
+#define MAIN_H
 
-int main(int argc, char* argv[])
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+
+#define SUCCESS 1
+#define FAILURE 0
+
+typedef struct str_Info
 {
-    //checking if file name is passed and nothing more is passed via command line
-    if(argc < 2 || argc > 2)
-    {
-        printf("ERROR: Incorrect way of passing CLA.\n");
-        printf("Usage: ./a.out <.cpp file_name>\n");
-        return FAILURE;
-    }
-    //if filename is passed via CLA
-    else
-    {
-        //opening file in read mode
-        FILE *fptr = fopen(argv[1], "r");
+    char buf_str[20];
+}Info;
 
-        //if file not exist
-        if(fptr == NULL)
-        {
-            printf("ERROR: file %s not exist, please pass correct file name.\n", argv[1]);
-            return FAILURE;
-        }
+int file_Validation(char* str, FILE *fptr);
+int extract_data(Info *info,FILE *fptr);
+int group_identifiers(char* str);
 
-        //function to check if file has content in it
-        if(file_Validation(argv[1], fptr) == SUCCESS)
-        {
-            //creating structure variable
-            Info info;
-            extract_data(&info, fptr);
-
-            printf("\nTokens generated.\n");
-            fclose(fptr);
-        }
-        else
-        {
-            return FAILURE;
-        }
-    }
-
-    return SUCCESS;
-}
+#endif
