@@ -1,20 +1,46 @@
-#ifndef MAIN_H
-#define MAIN_H
+#include "main.h"
+extern int invalid_id_flag;
 
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
-
-#define SUCCESS 1
-#define FAILURE 0
-
-typedef struct str_Info
+//function to extract each line from a file
+int extract_data(Info *info,FILE *fptr)
 {
-    char buf_str[20];
-}Info;
+    int i = 0;
+    char ch;
 
-int file_Validation(char* str, FILE *fptr);
-int extract_data(Info *info,FILE *fptr);
-int group_identifiers(char* str);
+    while(ch != EOF)
+    {
+        //reset index to 0
+        i = 0;
 
-#endif
+        //extracting a character at a time
+        ch = fgetc(fptr);
+
+        //if ch is newline skip the iteration
+        if(ch == '\n')
+        {
+            continue;
+        }
+
+        //start storing the characters in the variables until newline is reached
+        while(ch != '\n' && ch != EOF)
+        {
+            info -> buf_str[i++] = ch;
+            ch = fgetc(fptr);    
+        }
+        //padding null value at the end
+        info -> buf_str[i] = '\0';
+        //printf("%s\n", info->buf_str);
+
+        //calling functions to group it the variables
+        if(invalid_id_flag != 1)
+        {
+            group_identifiers(info -> buf_str);
+        }
+        else
+        {
+            return FAILURE;
+        }
+    }
+
+    return SUCCESS;
+}
